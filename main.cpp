@@ -1,6 +1,8 @@
 #include <iostream>
+#include "FifteenPuzzle.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    FifteenPuzzle p;
+
     return 0;
 }
