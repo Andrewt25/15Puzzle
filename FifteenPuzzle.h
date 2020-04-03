@@ -18,6 +18,7 @@ class FifteenPuzzle {
         bool solvability();
         int getBlankIndex(int state[16]);
         std::string * getAction(int state[16]);
+        std::string * takeAction(int state[16], std::string actions[4]);
 };
 
 

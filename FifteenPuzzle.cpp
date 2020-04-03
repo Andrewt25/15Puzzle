@@ -101,3 +101,18 @@ std::string * FifteenPuzzle::getAction(int *state)
     return actions;
 }
 
+std::string *FifteenPuzzle::takeAction(int *state, std::string *actions)
+{
+    int blankIndex = getBlankIndex(state);
+    return nullptr;
+}
+
+
+//finish build
+//ida* search
+    //recursion
+    //finding node
+//node stuff
+    //
+//database
+
