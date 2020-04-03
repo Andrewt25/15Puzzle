@@ -31,9 +31,32 @@ FifteenPuzzle::FifteenPuzzle()
                 //retries placing number if index already had a value
                 i--;
         }
-        solvable = solvability();
+        solvable = solvability(initState);
     }
+    std::cout<<"Initial state of Puzzle"<<std::endl;
     displayState(initState);
+}
+
+FifteenPuzzle::FifteenPuzzle(int *state)
+{
+    if(!solvability(state))
+    {
+        std::cout<<"Initial state is not solvable";
+    }
+    else
+    {
+        std::cout<<"Initial state of Puzzle"<<std::endl;
+        for (int i = 0; i < 16; i++)
+        {
+            initState[i] = state[i];
+        }
+        displayState(initState);
+    }
+
+}
+//return address of initial state
+int *FifteenPuzzle::getInitial() {
+    return initState;
 }
 //display all 16 elements of array
 void FifteenPuzzle::displayState(int *state)
@@ -50,7 +73,7 @@ void FifteenPuzzle::displayState(int *state)
     }
 }
 //checks if a given puzzle is solvable based on initial state
-bool FifteenPuzzle::solvability()
+bool FifteenPuzzle::solvability(int *state)
 {
     int inv = 0;
     int inv_sol = 0;
@@ -58,12 +81,12 @@ bool FifteenPuzzle::solvability()
     {
         for(int j = 0; j < 16; j ++)
         {
-            if(initState[i] > initState[j] && initState[i] != 0 && initState[j] != 0)
+            if(state[i] > state[j] && state[i] != 0 && state[j] != 0)
                 inv++;
         }
     }
 
-    int index = getBlankIndex(initState);
+    int index = getBlankIndex(state);
     if(index < 4)
         inv_sol = 1;
     else if(index > 7 && index < 12 )
@@ -88,7 +111,14 @@ int FifteenPuzzle::getBlankIndex(int *state)
 std::string * FifteenPuzzle::getAction(int *state)
 {
    int blankIndex = getBlankIndex(state);
-   std::string actions[4] = {"up", "down", "left", "right"};
+
+   std::string *actions;
+   actions = (std::string *) malloc(4*sizeof(std::string));
+   actions[0] = "up";
+   actions[1] = "down";
+   actions[2] = "left";
+   actions[3] = "right";
+
    if(blankIndex < 4)
        actions[0] = "";
    if(blankIndex > 11)
@@ -98,14 +128,45 @@ std::string * FifteenPuzzle::getAction(int *state)
    if(blankIndex%4 == 3)
        actions[3] = "";
 
+
     return actions;
 }
-
-std::string *FifteenPuzzle::takeAction(int *state, std::string *actions)
+//return newstate after a given action was taken
+int *FifteenPuzzle::takeAction(int *state, std::string action)
 {
     int blankIndex = getBlankIndex(state);
-    return nullptr;
+    int *newState = copyState(state);
+    int change;
+    if(action == "up")
+        change = blankIndex - 4;
+    else if(action == "down")
+        change = blankIndex + 4;
+    else if(action == "left")
+        change = blankIndex - 1;
+    else if(action == "right")
+        change = blankIndex + 1;
+
+    int temp = newState[change];
+    newState[change] = newState[blankIndex];
+    newState[blankIndex] = temp;
+
+    return newState;
 }
+//return copy of given state
+int *FifteenPuzzle::copyState(int *state)
+{
+    int* newstate;
+    newstate =(int *) malloc(16*sizeof(int));
+    for(int i = 0; i < 16; i++)
+        newstate[i] = state[i];
+
+    return newstate;
+
+}
+
+
+
+
 
 
 //finish build
@@ -116,3 +177,5 @@ std::string *FifteenPuzzle::takeAction(int *state, std::string *actions)
     //
 //database
 
+//would be nice
+//update display to be prettier
