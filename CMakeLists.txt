@@ -3,4 +3,4 @@ project(15Puzzle)
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
-add_executable(15Puzzle main.cpp FifteenPuzzle.cpp)
+add_executable(15Puzzle main.cpp FifteenPuzzle.cpp Node.cpp SolveMethods.cpp PatternDatabase.cpp)

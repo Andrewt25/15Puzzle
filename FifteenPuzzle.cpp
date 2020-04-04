@@ -36,7 +36,7 @@ FifteenPuzzle::FifteenPuzzle()
     std::cout<<"Initial state of Puzzle"<<std::endl;
     displayState(initState);
 }
-
+//constructor to solve given state
 FifteenPuzzle::FifteenPuzzle(int *state)
 {
     if(!solvability(state))
@@ -53,6 +53,20 @@ FifteenPuzzle::FifteenPuzzle(int *state)
         displayState(initState);
     }
 
+}
+//constructor for partial problems
+FifteenPuzzle::FifteenPuzzle(int *state, int *goal)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        initState[i] = state[i];
+    }
+    for (int i = 0; i < 16; i++)
+    {
+        goalState[i] = goal[i];
+    }
+    displayState(initState);
+    displayState(goalState);
 }
 //return address of initial state
 int *FifteenPuzzle::getInitial() {
@@ -79,7 +93,7 @@ bool FifteenPuzzle::solvability(int *state)
     int inv_sol = 0;
     for (int i  = 0; i < 16; i++)
     {
-        for(int j = 0; j < 16; j ++)
+        for(int j = i+1; j < 16; j ++)
         {
             if(state[i] > state[j] && state[i] != 0 && state[j] != 0)
                 inv++;
@@ -91,6 +105,9 @@ bool FifteenPuzzle::solvability(int *state)
         inv_sol = 1;
     else if(index > 7 && index < 12 )
         inv_sol = 1;
+    std::cout<< index<< std::endl;
+    std::cout<< inv<< std::endl;
+    std::cout<< inv_sol<< std::endl;
     return (inv % 2 == inv_sol);
 }
 //find the position of blank square in given state
@@ -113,7 +130,7 @@ std::string * FifteenPuzzle::getAction(int *state)
    int blankIndex = getBlankIndex(state);
 
    std::string *actions;
-   actions = (std::string *) malloc(4*sizeof(std::string));
+   actions = new std::string[4];
    actions[0] = "up";
    actions[1] = "down";
    actions[2] = "left";
@@ -152,17 +169,31 @@ int *FifteenPuzzle::takeAction(int *state, std::string action)
 
     return newState;
 }
+//check if given state is equal to goal state
+bool FifteenPuzzle::check_solved(int *state)
+{
+    for(int i = 0; i < 16; i++)
+    {
+        if(state[i] != goalState[i])
+            return false;
+    }
+    return  true;
+}
+
 //return copy of given state
 int *FifteenPuzzle::copyState(int *state)
 {
-    int* newstate;
-    newstate =(int *) malloc(16*sizeof(int));
+    int* newstate = new int[16];
     for(int i = 0; i < 16; i++)
         newstate[i] = state[i];
-
     return newstate;
 
 }
+
+int FifteenPuzzle::hCost(int *state) {
+    return 0;
+}
+
 
 
 
