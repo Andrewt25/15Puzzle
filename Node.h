@@ -10,21 +10,19 @@
 
 class Node{
     private:
-        Node *parent;
         int *state;
         std::string action;
-        int depth;
         int pathCost;
+        int depth;
     public:
         Node(int *state);
-        Node(int *state, Node *parent, std::string action, int pathCost);
-        int getDepth();
+        Node(int state[16], Node *parent, std::string action);
         int getPathCost();
         int *getState();
+        int getdepth();
         std::string getAction();
-        Node *getChild(std::string action, FifteenPuzzle problem);
+        Node *getChild(std::string action, FifteenPuzzle *problem);
         void decPathCost();
-        void removeParent();
         void freeState();
 };
 

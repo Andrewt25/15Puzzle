@@ -1,32 +1,26 @@
-//
-// Created by Andre on 4/3/2020.
-//
 
+#include <iostream>
 #include "Node.h"
 
 //constructor for initial node in search
 Node::Node(int *state)
 {
     this->state = state;
-    this->parent = NULL;
     this->action = "";
     this->depth = 0;
     this->pathCost = 0;
 }
 //constructor for nodes that are not initial postition
-Node::Node(int *state, Node *parent, std::string action, int pathCost)
+Node::Node(int *state, Node *parent, std::string action)
 {
     this->state = state;
-    this->parent = parent;
     this->action = action;
-    this->depth = parent->getDepth() + 1;
+    this->depth = parent->getdepth() + 1;
     //takes parent pathcost add together with cost supplied from heuristic (pathcost param) then add one for increased depth
-    this->pathCost = parent->getPathCost() + pathCost + 1;
+    //if no db supplied defaults to 0 for supplied pathcost
+    this->pathCost = parent->getPathCost() + 1;
 }
 
-int Node::getDepth() {
-    return this->depth;
-}
 int Node::getPathCost() {
     return this->pathCost;
 }
@@ -37,10 +31,18 @@ std::string Node::getAction() {
     return this->action;
 }
 //create child node using designated action
-Node *Node::getChild(std::string action, FifteenPuzzle problem)
+Node *Node::getChild(std::string action, FifteenPuzzle *problem)
 {
-    int *state = problem.takeAction(this->state, action);
-    Node *child = new Node(state, this, action, problem.hCost(state));
+    int *state = problem->takeAction(this->state, action);
+    if(action == "up")
+        action = "down";
+    else if(action == "down")
+        action = "up";
+    else if(action == "right")
+        action = "left";
+    else
+        action = "right";
+    Node *child = new Node(state, this, action);
     return child;
 }
 
@@ -54,6 +56,6 @@ void Node::freeState() {
     this->state = NULL;
 }
 
-void Node::removeParent() {
-    this->parent = NULL;
+int Node::getdepth() {
+    return this->depth;
 }

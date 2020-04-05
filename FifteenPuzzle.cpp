@@ -3,10 +3,15 @@
 #include <cstring>
 #include <time.h>
 #include "FifteenPuzzle.h"
+#include "PatternDatabase.h"
 
 //constructor creates random solvable starting state
-FifteenPuzzle::FifteenPuzzle()
+FifteenPuzzle::FifteenPuzzle(const std::unordered_map <unsigned long long, int>& db1, const std::unordered_map <unsigned long long, int>& db2, const std::unordered_map <unsigned long long, int>& db3)
 {
+
+    this->db1 = db1;
+    this->db2 = db2;
+    this->db3 = db3;
     bool solvable = false;
     //var used for random index
     int x;
@@ -37,11 +42,16 @@ FifteenPuzzle::FifteenPuzzle()
     displayState(initState);
 }
 //constructor to solve given state
-FifteenPuzzle::FifteenPuzzle(int *state)
+FifteenPuzzle::FifteenPuzzle(int *state, const std::unordered_map <unsigned long long, int>& db1, const std::unordered_map <unsigned long long, int>& db2, const std::unordered_map <unsigned long long, int>& db3)
 {
+    this->db1 = db1;
+    this->db2 = db2;
+    this->db3 = db3;
     if(!solvability(state))
     {
         std::cout<<"Initial state is not solvable";
+        //flag for unsolvable
+        initState[0] = -1;
     }
     else
     {
@@ -82,8 +92,6 @@ void FifteenPuzzle::displayState(int *state)
             std::cout << state[i] << std::endl;
         else
             std::cout << state[i] << " ";
-
-
     }
 }
 //checks if a given puzzle is solvable based on initial state
@@ -105,9 +113,6 @@ bool FifteenPuzzle::solvability(int *state)
         inv_sol = 1;
     else if(index > 7 && index < 12 )
         inv_sol = 1;
-    std::cout<< index<< std::endl;
-    std::cout<< inv<< std::endl;
-    std::cout<< inv_sol<< std::endl;
     return (inv % 2 == inv_sol);
 }
 //find the position of blank square in given state
@@ -144,7 +149,6 @@ std::string * FifteenPuzzle::getAction(int *state)
        actions[2] = "";
    if(blankIndex%4 == 3)
        actions[3] = "";
-
 
     return actions;
 }
@@ -190,8 +194,20 @@ int *FifteenPuzzle::copyState(int *state)
 
 }
 
-int FifteenPuzzle::hCost(int *state) {
-    return 0;
+int FifteenPuzzle::hCost(int *state)
+{
+    int subseta[5] = {1,2,3,4,5};
+    int subsetb[5] = {6,7,8,11,12};
+    int subsetc[5] = {9,10,13,14,15};
+
+    unsigned long long key = hashFunction(state, subseta, false );
+    int cost = db1[key];
+
+    key = hashFunction(state, subsetb, false );
+    cost = cost + db2[key];
+    key = hashFunction(state, subsetc, false );
+    cost = cost + db3[key];
+    return cost;
 }
 
 
@@ -200,13 +216,3 @@ int FifteenPuzzle::hCost(int *state) {
 
 
 
-//finish build
-//ida* search
-    //recursion
-    //finding node
-//node stuff
-    //
-//database
-
-//would be nice
-//update display to be prettier
