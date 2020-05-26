@@ -11,7 +11,7 @@
 # NODE.CPP  
   Creates Nodes for curent puzzle Nodes represent given state of a puzzle
     Contains info of state value, available actions, pathCost and depth,
-    contains helper functions to get children states and free memory when,
+    contains helper functions to get children states and free memory when
     state is no longer needed
       
 # PatternDatabase.CPP
